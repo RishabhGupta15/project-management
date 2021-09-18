@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @RequestMapping("/employees")
 @Controller
 public class EmployeeController {
@@ -18,11 +20,18 @@ public class EmployeeController {
     @Autowired
     EmployeeRepository employeeRepository;
 
+    @GetMapping()
+    public String displayEmployees(Model model){
+        List<Employee> employees = (List<Employee>) employeeRepository.findAll();
+        model.addAttribute("employees", employees);
+        return "employee/list-employees";
+    }
+
     @GetMapping("/new")
     public String createNewEmployee(Model model){
         Employee employee = new Employee();
         model.addAttribute("employee", employee);
-        return "new-employee";
+        return "employee/new-employee";
     }
     @PostMapping("/save")
     public String saveEmployee(Model model, Employee employee){
